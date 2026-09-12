@@ -112,83 +112,83 @@
     </div>
   </div>
 
-  <script>
-    function calculateAll() {
-      const len = parseFloat(document.getElementById('wallLength').value) || 0;
-      const height = parseFloat(document.getElementById('wallHeight').value) || 0;
-      const type = document.getElementById('wallType').value;
-      const plaster = document.getElementById('plasterType').value;
+<script>
+  function calculateAll() {
+    const len = parseFloat(document.getElementById('wallLength').value) || 0;
+    const height = parseFloat(document.getElementById('wallHeight').value) || 0;
+    const type = document.getElementById('wallType').value;
+    const plaster = document.getElementById('plasterType').value;
 
-      // Price Inputs
-      const pBrick = parseFloat(document.getElementById('priceBrick').value) || 0;
-      const pCement = parseFloat(document.getElementById('priceCement').value) || 0;
-      const pSand = parseFloat(document.getElementById('priceSand').value) || 0;
-      const pLabor = parseFloat(document.getElementById('priceLaborSqft').value) || 0;
+    // Price Inputs
+    const pBrick = parseFloat(document.getElementById('priceBrick').value) || 0;
+    const pCement = parseFloat(document.getElementById('priceCement').value) || 0;
+    const pSand = parseFloat(document.getElementById('priceSand').value) || 0;
+    const pLabor = parseFloat(document.getElementById('priceLaborSqft').value) || 0;
 
-      if (len <= 0 || height <= 0) {
-        alert('ကျေးဇူးပြု၍ အလျားနှင့် အမြင့်ကို မှန်ကန်စွာ ဖြည့်စွက်ပါ');
-        return;
-      }
-
-      const sqft = len * height;
-
-      // 1. Brick Calculation
-      let bricks = 0, bCement = 0, bSand = 0;
-      if (type === 'half') {
-        bricks = Math.ceil(sqft * 4.5);
-        bCement = sqft * 0.02;
-        bSand = sqft * 0.08;
-      } else {
-        bricks = Math.ceil(sqft * 9);
-        bCement = sqft * 0.04;
-        bSand = sqft * 0.16;
-      }
-
-      // 2. Plaster Calculation
-      let plasterSides = 0;
-      if (plaster === 'both') plasterSides = 2;
-      else if (plaster === 'single') plasterSides = 1;
-
-      const pArea = sqft * plasterSides;
-      const pCement = pArea * 0.018;
-      const pSand = pArea * 0.09;
-
-      // Totals Materials
-      const totalCement = parseFloat((bCement + pCement).toFixed(2));
-      const totalSand = parseFloat((bSand + pSand).toFixed(2));
-
-      // 3. Working Hours & Labor Calculation
-      // Standard: 1 mason + 1 helper can lay ~100-120 sqft half brick wall in 8 hrs (1 day)
-      let laborRateSqftPerHour = 15; // Average sqft per hour for 2-man team
-      if (type === 'full') laborRateSqftPerHour = 10;
-      
-      const totalWorkArea = sqft + pArea; // total area including plastering
-      const totalHours = Math.ceil(totalWorkArea / laborRateSqftPerHour);
-      const totalDays = (totalHours / 8).toFixed(1);
-
-      // Costs
-      const cBrickCost = bricks * pBrick;
-      const cCementCost = totalCement * pCement;
-      const cSandCost = totalSand * pSand;
-      const cLaborCost = totalWorkArea * pLabor;
-      const totalCost = cBrickCost + cCementCost + cSandCost + cLaborCost;
-
-      // Render Results
-      document.getElementById('resBricks').innerText = bricks.toLocaleString() + ' လုံး';
-      document.getElementById('resCement').innerText = totalCement + ' အိတ်';
-      document.getElementById('resSand').innerText = totalSand + ' Cu.ft';
-
-      document.getElementById('resSqft').innerText = sqft + ' Sq.ft';
-      document.getElementById('resWorkingHours').innerText = `${totalHours} နာရီ (${totalDays} ရက်ခန့်)`;
-      
-      document.getElementById('costBrick').innerText = cBrickCost.toLocaleString() + ' ကျပ်';
-      document.getElementById('costCement').innerText = Math.round(cCementCost).toLocaleString() + ' ကျပ်';
-      document.getElementById('costSand').innerText = Math.round(cSandCost).toLocaleString() + ' ကျပ်';
-      document.getElementById('costLabor').innerText = Math.round(cLaborCost).toLocaleString() + ' ကျပ်';
-      document.getElementById('grandTotal').innerText = Math.round(totalCost).toLocaleString() + ' ကျပ်';
-
-      document.getElementById('resultBox').style.display = 'block';
+    if (len <= 0 || height <= 0) {
+      alert('ကျေးဇူးပြု၍ အလျားနှင့် အမြင့်ကို မှန်ကန်စွာ ဖြည့်စွက်ပါ');
+      return;
     }
-  </script>
+
+    const sqft = len * height;
+
+    // 1. Brick Calculation
+    let bricks = 0, bCement = 0, bSand = 0;
+    if (type === 'half') {
+      bricks = Math.ceil(sqft * 4.5);
+      bCement = sqft * 0.02;
+      bSand = sqft * 0.08;
+    } else {
+      bricks = Math.ceil(sqft * 9);
+      bCement = sqft * 0.04;
+      bSand = sqft * 0.16;
+    }
+
+    // 2. Plaster Calculation
+    let plasterSides = 0;
+    if (plaster === 'both') plasterSides = 2;
+    else if (plaster === 'single') plasterSides = 1;
+
+    const pArea = sqft * plasterSides;
+    const pCement = pArea * 0.018;
+    const pSand = pArea * 0.09;
+
+    // Totals Materials
+    const totalCement = parseFloat((bCement + pCement).toFixed(2));
+    const totalSand = parseFloat((bSand + pSand).toFixed(2));
+
+    // 3. Working Hours Calculation
+    let laborRateSqftPerHour = 15;
+    if (type === 'full') laborRateSqftPerHour = 10;
+    
+    const totalWorkArea = sqft + pArea;
+    const totalHours = Math.ceil(totalWorkArea / laborRateSqftPerHour);
+    const totalDays = (totalHours / 8).toFixed(1);
+
+    // Costs
+    const cBrickCost = bricks * pBrick;
+    const cCementCost = totalCement * pCement;
+    const cSandCost = totalSand * pSand;
+    const cLaborCost = totalWorkArea * pLabor;
+    const totalCost = cBrickCost + cCementCost + cSandCost + cLaborCost;
+
+    // Display Results in HTML
+    document.getElementById('resBricks').innerText = bricks.toLocaleString() + ' လုံး';
+    document.getElementById('resCement').innerText = totalCement + ' အိတ်';
+    document.getElementById('resSand').innerText = totalSand + ' Cu.ft';
+
+    document.getElementById('resSqft').innerText = sqft + ' Sq.ft';
+    document.getElementById('resWorkingHours').innerText = `${totalHours} နာရီ (${totalDays} ရက်ခန့်)`;
+    
+    document.getElementById('costBrick').innerText = cBrickCost.toLocaleString() + ' ကျပ်';
+    document.getElementById('costCement').innerText = Math.round(cCementCost).toLocaleString() + ' ကျပ်';
+    document.getElementById('costSand').innerText = Math.round(cSandCost).toLocaleString() + ' ကျပ်';
+    document.getElementById('costLabor').innerText = Math.round(cLaborCost).toLocaleString() + ' ကျပ်';
+    document.getElementById('grandTotal').innerText = Math.round(totalCost).toLocaleString() + ' ကျပ်';
+
+    // Show Result Box
+    document.getElementById('resultBox').style.display = 'block';
+  }
+</script>
 </body>
 </html>
