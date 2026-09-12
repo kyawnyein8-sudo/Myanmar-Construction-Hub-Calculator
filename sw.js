@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mya-const-hub-v3.0';
+const CACHE_NAME = 'mya-const-hub-v4.0';
 
 const STATIC_ASSETS = [
   './',
