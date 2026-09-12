@@ -1,6 +1,5 @@
 const CACHE_NAME = 'mya-const-hub-v3.0';
 
-// Offline မဖြစ်မီ ကြိုတင် Cache လုပ်မည့် ဖိုင်များ
 const STATIC_ASSETS = [
   './',
   './index.html',
