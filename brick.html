@@ -3,192 +3,181 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>အုတ်စီ/အချောကိုင် စရိတ်တွက်ချက်စက်</title>
+  <title>အုတ်စီ / အချောကိုင် စရိတ်တွက်ချက်စက်</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; font-family: 'Padauk', sans-serif; }
-    body { background: #f0f2f5; padding: 16px; margin: 0; }
-    .header { background: #2481cc; color: white; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .card { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); margin-bottom: 12px; }
+    body { background: #f0f2f5; padding: 12px; margin: 0; color: #333; }
+    .container { max-width: 500px; margin: 0 auto; background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+    .header { text-align: center; color: #2481cc; margin-bottom: 16px; border-bottom: 2px solid #eef2f5; padding-bottom: 8px; }
+    .header h3 { margin: 0; font-size: 1.3rem; }
     .form-group { margin-bottom: 12px; }
     label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 0.9rem; }
-    input, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; }
-    .row { display: flex; gap: 10px; }
-    .row .form-group { flex: 1; }
-    .btn { width: 100%; padding: 12px; background: #2481cc; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; }
-    .result-box { background: #eef6fc; border: 1px solid #2481cc; border-radius: 8px; padding: 12px; margin-top: 12px; display: none; }
-    .result-item { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
-    .section-title { font-weight: bold; color: #2481cc; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin: 12px 0 6px 0; }
-    .total-highlight { background: #059669; color: white; padding: 10px; border-radius: 6px; margin-top: 10px; }
-    .total-highlight .result-item { margin-bottom: 0; font-size: 1rem; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; outline: none; }
+    input:focus, select:focus { border-color: #2481cc; }
+    .row { display: flex; gap: 8px; }
+    .col { flex: 1; }
+    .btn-calc { width: 100%; background: #2481cc; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; box-shadow: 0 3px 6px rgba(36,129,204,0.3); }
+    .btn-calc:active { transform: scale(0.98); }
+    .result-box { background: #eef6fc; border-radius: 10px; padding: 14px; margin-top: 16px; border-left: 5px solid #2481cc; }
+    .result-title { font-weight: bold; font-size: 1rem; color: #2481cc; margin-bottom: 8px; border-bottom: 1px solid #d0e3f4; padding-bottom: 4px; }
+    .result-item { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.95rem; }
+    .result-item.total { font-weight: bold; color: #d9534f; border-top: 1px dashed #bbb; padding-top: 6px; margin-top: 8px; font-size: 1.05rem; }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <a href="index.html" style="color: white; text-decoration: none;"><i class="fa-solid fa-arrow-left"></i></a>
-    <h3 style="margin: 0;">🧱 အုတ်စီ/အချောကိုင် စရိတ်တွက်ချက်စက်</h3>
-  </div>
+  <div class="container">
+    <div class="header">
+      <h3>🧱 အုတ်စီ / အချောကိုင် စရိတ်တွက်ချက်စက်</h3>
+    </div>
 
-  <div class="card">
-    <div class="section-title">၁။ အတိုင်းအတာများ (Dimensions)</div>
+    <!-- Inputs -->
     <div class="row">
-      <div class="form-group">
-        <label>အလျား (ပေ):</label>
-        <input type="number" id="wallLength" placeholder="10" />
+      <div class="col form-group">
+        <label>အလျား (ပေ)</label>
+        <input type="number" id="length" value="10" step="any">
       </div>
-      <div class="form-group">
-        <label>အမြင့် (ပေ):</label>
-        <input type="number" id="wallHeight" placeholder="10" />
+      <div class="col form-group">
+        <label>အမြင့် (ပေ)</label>
+        <input type="number" id="height" value="10" step="any">
       </div>
     </div>
 
     <div class="form-group">
-      <label>နံရံအထူ:</label>
-      <select id="wallType">
-        <option value="half">၄ လက်မခွဲ နံရံ (အုတ်တစ်လွှာ)</option>
-        <option value="full">၉ လက်မ နံရံ (အုတ်နှစ်လွှာ)</option>
+      <label>နံရံအထူ</label>
+      <select id="wallThickness">
+        <option value="4.5">4.5 လက်မ (အုတ်တစ်ဝက်စီ)</option>
+        <option value="9">9 လက်မ (အုတ်တစ်ကြောင်းစီ)</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>အချောကိုင်မည့် မျက်နှာပြင် (Plastering):</label>
+      <label>အချောကိုင်မည့် မျက်နှာပြင်</label>
       <select id="plasterType">
-        <option value="both">နှစ်ဖက်စလုံး အချောကိုင်မည် (Inside & Outside)</option>
-        <option value="single">တစ်ဖက်တည်း အချောကိုင်မည်</option>
-        <option value="none">အချောမကိုင်ပါ</option>
+        <option value="both">နှစ်ဖက်စလုံး အချောကိုင်မည်</option>
+        <option value="one">တစ်ဖက်တည်း အချောကိုင်မည်</option>
+        <option value="none">အချောမကိုင်ပါ (အုတ်စီသန့်သန့်)</option>
       </select>
     </div>
 
-    <div class="section-title">၂။ ပစ္စည်းနှင့် လုပ်အားခ ဈေးနှုန်းများ (Price Options)</div>
+    <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+
     <div class="row">
-      <div class="form-group">
-        <label>အုတ် ၁ လုံးဈေး (ကျပ်):</label>
-        <input type="number" id="priceBrick" value="510" />
+      <div class="col form-group">
+        <label>အုတ် ၁ လုံး ဈေး (ကျပ်)</label>
+        <input type="number" id="brickPrice" value="250">
       </div>
-      <div class="form-group">
-        <label>ဘိလပ်မြေ ၁ အိတ် (ကျပ်):</label>
-        <input type="number" id="priceCement" value="18000" />
+      <div class="col form-group">
+        <label>ဘိလပ်မြေ ၁ အိတ် (ကျပ်)</label>
+        <input type="number" id="cementPrice" value="15000">
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group">
-        <label>သဲ ၁ Cu.ft ဈေး (ကျပ်):</label>
-        <input type="number" id="priceSand" value="600" />
+      <div class="col form-group">
+        <label>သဲ ၁ ကျင်း ဈေး (ကျပ်)</label>
+        <input type="number" id="sandPrice" value="35000">
       </div>
-      <div class="form-group">
-        <label>၁ စတုရန်းပေ လုပ်အားခ (ကျပ်):</label>
-        <input type="number" id="priceLaborSqft" value="1500" placeholder="ဥပမာ - 1500" />
+      <div class="col form-group">
+        <label>၁ စတုရန်းပေ လုပ်အားခ</label>
+        <input type="number" id="laborRate" value="350">
       </div>
     </div>
 
-    <button class="btn" onclick="calculateAll()">တွက်ချက်မည်</button>
+    <button type="button" class="btn-calc" onclick="calculateAll()">တွက်ချက်မည်</button>
 
-    <div class="result-box" id="resultBox">
-      <div class="section-title">🧱 ပစ္စည်းပမာဏ လိုအပ်ချက်</div>
-      <div class="result-item"><span>လိုအပ်သော အုတ်ရေ:</span><strong id="resBricks">0 လုံး</strong></div>
-      <div class="result-item"><span>စုစုပေါင်း ဘိလပ်မြေ:</span><strong id="resCement">0 အိတ်</strong></div>
-      <div class="result-item"><span>စုစုပေါင်း သဲ:</span><strong id="resSand">0 Cu.ft</strong></div>
+    <!-- Results Section -->
+    <div class="result-box" id="resultContainer">
+      <div class="result-title">📊 တွက်ချက်ရရှိသော ပစ္စည်းပမာဏ</div>
+      <div class="result-item"><span>ဧရိယာ စုစုပေါင်း:</span> <span id="resArea">0 Sq.ft</span></div>
+      <div class="result-item"><span>အုတ် လိုအပ်ချက်:</span> <span id="resBricks">0 လုံး</span></div>
+      <div class="result-item"><span>ဘိလပ်မြေ လိုအပ်ချက်:</span> <span id="resCement">0 အိတ်</span></div>
+      <div class="result-item"><span>သဲ လိုအပ်ချက်:</span> <span id="resSand">0 ကျင်း</span></div>
+      <div class="result-item"><span>ခန့်မှန်း ကြာမြင့်ချိန်:</span> <span id="resTime">0 ရက်</span></div>
 
-      <div class="section-title">⏱️ ကြာမြင့်ချိန်နှင့် လုပ်အားခ ခန့်မှန်းချက်</div>
-      <div class="result-item"><span>နံရံဧရိယာ စုစုပေါင်း:</span><strong id="resSqft">0 Sq.ft</strong></div>
-      <div class="result-item"><span>ခန့်မှန်း ကြာမြင့်ချိန်:</span><strong id="resWorkingHours">0 နာရီ (0 ရက်)</strong></div>
-      <div class="result-item"><span>ခန့်မှန်း လိုအပ်မည့် အလုပ်သမား:</span><strong id="resLaborCount">ဆရာ ၁ + တပည့် ၁</strong></div>
-
-      <div class="section-title">💰 ကုန်ကျစရိတ် ခန့်မှန်းတွက်ချက်မှု</div>
-      <div class="result-item"><span>အုတ် ကုန်ကျစရိတ်:</span><strong id="costBrick">0 ကျပ်</strong></div>
-      <div class="result-item"><span>ဘိလပ်မြေ ကုန်ကျစရိတ်:</span><strong id="costCement">0 ကျပ်</strong></div>
-      <div class="result-item"><span>သဲ ကုန်ကျစရိတ်:</span><strong id="costSand">0 ကျပ်</strong></div>
-      <div class="result-item"><span>စုစုပေါင်း လုပ်အားခ:</span><strong id="costLabor">0 ကျပ်</strong></div>
-
-      <div class="total-highlight">
-        <div class="result-item">
-          <span>စုစုပေါင်း ခန့်မှန်း ကုန်ကျစရိတ်:</span>
-          <strong id="grandTotal">0 ကျပ်</strong>
-        </div>
-      </div>
+      <div class="result-title" style="margin-top:14px;">💰 ကုန်ကျစရိတ် ခန့်မှန်းခြေ</div>
+      <div class="result-item"><span>အုတ် ကုန်ကျစရိတ်:</span> <span id="costBricks">0 Ks</span></div>
+      <div class="result-item"><span>ဘိလပ်မြေ ကုန်ကျစရိတ်:</span> <span id="costCement">0 Ks</span></div>
+      <div class="result-item"><span>သဲ ကုန်ကျစရိတ်:</span> <span id="costSand">0 Ks</span></div>
+      <div class="result-item"><span>လုပ်အားခ စုစုပေါင်း:</span> <span id="costLabor">0 Ks</span></div>
+      <div class="result-item total"><span>စုစုပေါင်း ကုန်ကျစရိတ်:</span> <span id="grandTotal">0 Ks</span></div>
     </div>
   </div>
 
-<script>
-  function calculateAll() {
-    const len = parseFloat(document.getElementById('wallLength').value) || 0;
-    const height = parseFloat(document.getElementById('wallHeight').value) || 0;
-    const type = document.getElementById('wallType').value;
-    const plaster = document.getElementById('plasterType').value;
+  <script>
+    function calculateAll() {
+      // Inputs Fetch
+      const length = parseFloat(document.getElementById('length').value) || 0;
+      const height = parseFloat(document.getElementById('height').value) || 0;
+      const thickness = parseFloat(document.getElementById('wallThickness').value);
+      const plasterType = document.getElementById('plasterType').value;
 
-    // Price Inputs
-    const pBrick = parseFloat(document.getElementById('priceBrick').value) || 0;
-    const pCement = parseFloat(document.getElementById('priceCement').value) || 0;
-    const pSand = parseFloat(document.getElementById('priceSand').value) || 0;
-    const pLabor = parseFloat(document.getElementById('priceLaborSqft').value) || 0;
+      const brickPrice = parseFloat(document.getElementById('brickPrice').value) || 0;
+      const cementPrice = parseFloat(document.getElementById('cementPrice').value) || 0;
+      const sandPrice = parseFloat(document.getElementById('sandPrice').value) || 0;
+      const laborRate = parseFloat(document.getElementById('laborRate').value) || 0;
 
-    if (len <= 0 || height <= 0) {
-      alert('ကျေးဇူးပြု၍ အလျားနှင့် အမြင့်ကို မှန်ကန်စွာ ဖြည့်စွက်ပါ');
-      return;
+      // Area Calculation
+      const area = length * height;
+
+      if (area <= 0) {
+        alert('ကျေးဇူးပြု၍ အလျားနှင့် အမြင့်ကို မှန်ကန်စွာ ထည့်သွင်းပါ။');
+        return;
+      }
+
+      // 1. Bricks calculation (4.5" = ~4.5 bricks/sqft, 9" = ~9 bricks/sqft)
+      const bricksPerSqFt = (thickness === 4.5) ? 4.5 : 9;
+      const totalBricks = Math.ceil(area * bricksPerSqFt);
+
+      // 2. Cement & Sand calculation for Brickwork
+      let cementBags = (thickness === 4.5) ? (area * 0.02) : (area * 0.04);
+      let sandCuFt = (thickness === 4.5) ? (area * 0.08) : (area * 0.16);
+
+      // 3. Plastering Addition
+      let plasterMultiplier = 0;
+      if (plasterType === 'both') plasterMultiplier = 2;
+      else if (plasterType === 'one') plasterMultiplier = 1;
+
+      if (plasterMultiplier > 0) {
+        cementBags += (area * 0.012 * plasterMultiplier);
+        sandCuFt += (area * 0.05 * plasterMultiplier);
+      }
+
+      const totalCement = Math.ceil(cementBags * 10) / 10; // Round to 1 decimal
+      const totalSandSud = Math.ceil((sandCuFt / 100) * 100) / 100; // In Sud/Kyin
+
+      // 4. Time Estimate (Assuming 1 Mason + 1 Helper can do ~80 sqft brickwork per day)
+      const totalHours = Math.round((area / 10) * 10) / 10;
+      const totalDays = Math.ceil((area / 80) * 10) / 10;
+
+      // Cost Calculation
+      const costBricksVal = totalBricks * brickPrice;
+      const costCementVal = Math.ceil(totalCement * cementPrice);
+      const costSandVal = Math.ceil(totalSandSud * sandPrice);
+      const costLaborVal = area * laborRate;
+      const grandTotalVal = costBricksVal + costCementVal + costSandVal + costLaborVal;
+
+      // Display Quantities
+      document.getElementById('resArea').innerText = area.toLocaleString() + ' Sq.ft';
+      document.getElementById('resBricks').innerText = totalBricks.toLocaleString() + ' လုံး';
+      document.getElementById('resCement').innerText = totalCement + ' အိတ်';
+      document.getElementById('resSand').innerText = totalSandSud + ' ကျင်း';
+      document.getElementById('resTime').innerText = totalDays + ' ရက် (' + totalHours + ' နာရီ)';
+
+      // Display Costs
+      document.getElementById('costBricks').innerText = costBricksVal.toLocaleString() + ' Ks';
+      document.getElementById('costCement').innerText = costCementVal.toLocaleString() + ' Ks';
+      document.getElementById('costSand').innerText = costSandVal.toLocaleString() + ' Ks';
+      document.getElementById('costLabor').innerText = costLaborVal.toLocaleString() + ' Ks';
+      document.getElementById('grandTotal').innerText = grandTotalVal.toLocaleString() + ' Ks';
     }
 
-    const sqft = len * height;
-
-    // 1. Brick Calculation
-    let bricks = 0, bCement = 0, bSand = 0;
-    if (type === 'half') {
-      bricks = Math.ceil(sqft * 4.5);
-      bCement = sqft * 0.02;
-      bSand = sqft * 0.08;
-    } else {
-      bricks = Math.ceil(sqft * 9);
-      bCement = sqft * 0.04;
-      bSand = sqft * 0.16;
-    }
-
-    // 2. Plaster Calculation
-    let plasterSides = 0;
-    if (plaster === 'both') plasterSides = 2;
-    else if (plaster === 'single') plasterSides = 1;
-
-    const pArea = sqft * plasterSides;
-    const pCement = pArea * 0.018;
-    const pSand = pArea * 0.09;
-
-    // Totals Materials
-    const totalCement = parseFloat((bCement + pCement).toFixed(2));
-    const totalSand = parseFloat((bSand + pSand).toFixed(2));
-
-    // 3. Working Hours Calculation
-    let laborRateSqftPerHour = 15;
-    if (type === 'full') laborRateSqftPerHour = 10;
-    
-    const totalWorkArea = sqft + pArea;
-    const totalHours = Math.ceil(totalWorkArea / laborRateSqftPerHour);
-    const totalDays = (totalHours / 8).toFixed(1);
-
-    // Costs
-    const cBrickCost = bricks * pBrick;
-    const cCementCost = totalCement * pCement;
-    const cSandCost = totalSand * pSand;
-    const cLaborCost = totalWorkArea * pLabor;
-    const totalCost = cBrickCost + cCementCost + cSandCost + cLaborCost;
-
-    // Display Results in HTML
-    document.getElementById('resBricks').innerText = bricks.toLocaleString() + ' လုံး';
-    document.getElementById('resCement').innerText = totalCement + ' အိတ်';
-    document.getElementById('resSand').innerText = totalSand + ' Cu.ft';
-
-    document.getElementById('resSqft').innerText = sqft + ' Sq.ft';
-    document.getElementById('resWorkingHours').innerText = `${totalHours} နာရီ (${totalDays} ရက်ခန့်)`;
-    
-    document.getElementById('costBrick').innerText = cBrickCost.toLocaleString() + ' ကျပ်';
-    document.getElementById('costCement').innerText = Math.round(cCementCost).toLocaleString() + ' ကျပ်';
-    document.getElementById('costSand').innerText = Math.round(cSandCost).toLocaleString() + ' ကျပ်';
-    document.getElementById('costLabor').innerText = Math.round(cLaborCost).toLocaleString() + ' ကျပ်';
-    document.getElementById('grandTotal').innerText = Math.round(totalCost).toLocaleString() + ' ကျပ်';
-
-    // Show Result Box
-    document.getElementById('resultBox').style.display = 'block';
-  }
-</script>
+    // Auto calculate on page load
+    window.onload = function() {
+      calculateAll();
+    };
+  </script>
 </body>
 </html>
