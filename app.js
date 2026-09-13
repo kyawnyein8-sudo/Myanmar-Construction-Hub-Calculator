@@ -19,7 +19,6 @@ const shops = [
   { name: "အောင်မင်္ဂလာ သံ/အုတ်ဆိုင်", location: "မရမ်းကုန်း၊ ရန်ကုန်။", phone: "09987654321", isVip: false }
 ];
 
-// Live Price Ticker အတွက် Google Sheets CSV Link (ရှိပါက ထည့်ပါ)
 const sheetCsvUrl = ""; 
 
 // ----------------------------------------------------
@@ -57,8 +56,8 @@ function renderShops() {
     <div class="shop-card ${s.isVip ? 'is-vip' : ''}">
       <div>
         ${s.isVip ? '<div class="vip-tag">VIP SPONSOR</div>' : ''}
-        <div class="shop-title">${s.name}</div>
-        <div class="shop-subtext"><i class="fa-solid fa-location-dot"></i> ${s.location}</div>
+        <div class="shop-title" style="font-weight:bold;">${s.name}</div>
+        <div class="shop-subtext" style="font-size:0.8rem; color:#666;"><i class="fa-solid fa-location-dot"></i> ${s.location}</div>
       </div>
       <a href="tel:${s.phone}" class="call-action-btn"><i class="fa-solid fa-phone"></i> ဖုန်းခေါ်မည်</a>
     </div>
@@ -78,25 +77,40 @@ function switchTab(tabId, element) {
 }
 
 // ----------------------------------------------------
-// LOCAL STORAGE MANAGEMENT (PRICES & HISTORY)
+// LOCAL STORAGE MANAGEMENT
 // ----------------------------------------------------
 function savePrices() {
-  const cement = document.getElementById('cementPrice').value;
-  const brick = document.getElementById('brickPrice').value;
-  const steel = document.getElementById('steelPrice').value;
+  const cementEl = document.getElementById('cementPrice');
+  const brickEl = document.getElementById('brickPrice');
+  const steelEl = document.getElementById('steelPrice');
 
-  const prices = { cement, brick, steel };
+  if (!cementEl || !brickEl || !steelEl) return;
+
+  const prices = {
+    cement: cementEl.value,
+    brick: brickEl.value,
+    steel: steelEl.value
+  };
+
   localStorage.setItem('myanmar_hub_prices', JSON.stringify(prices));
   alert('ဈေးနှုန်းများ သိမ်းဆည်းပြီးပါပြီ!');
 }
 
 function loadSavedPrices() {
   const saved = localStorage.getItem('myanmar_hub_prices');
-  if (saved) {
+  if (!saved) return;
+
+  try {
     const p = JSON.parse(saved);
-    if (p.cement) document.getElementById('cementPrice').value = p.cement;
-    if (p.brick) document.getElementById('brickPrice').value = p.brick;
-    if (p.steel) document.getElementById('steelPrice').value = p.steel;
+    const cementEl = document.getElementById('cementPrice');
+    const brickEl = document.getElementById('brickPrice');
+    const steelEl = document.getElementById('steelPrice');
+
+    if (cementEl && p.cement) cementEl.value = p.cement;
+    if (brickEl && p.brick) brickEl.value = p.brick;
+    if (steelEl && p.steel) steelEl.value = p.steel;
+  } catch (e) {
+    console.error("Price JSON parsing error:", e);
   }
 }
 
@@ -118,10 +132,10 @@ function renderHistory() {
   container.innerHTML = history.map(item => `
     <div class="history-item">
       <div>
-        <strong style="font-size: 0.88rem;">${item.title}</strong>
-        <div style="font-size: 0.75rem; color: var(--text-muted);">${item.date}</div>
+        <strong style="font-size: 0.88rem;">${item.title || ''}</strong>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">${item.date || ''}</div>
       </div>
-      <span style="font-weight: bold; color: var(--primary-color);">${item.result}</span>
+      <span style="font-weight: bold; color: var(--primary-color);">${item.result || ''}</span>
     </div>
   `).join('');
 }
@@ -136,12 +150,15 @@ function clearHistory() {
 // ----------------------------------------------------
 async function fetchLiveTicker() {
   if (!sheetCsvUrl) return;
+  const tickerEl = document.getElementById('tickerContent');
+  if (!tickerEl) return;
+
   try {
     const res = await fetch(sheetCsvUrl);
     const text = await res.text();
     const items = text.split('\n').map(i => i.trim()).filter(i => i.length > 0);
     if (items.length > 0) {
-      document.getElementById('tickerContent').innerText = "📢 ယနေ့ ပေါက်ဈေးများ — " + items.join(" | ");
+      tickerEl.innerText = "📢 ယနေ့ ပေါက်ဈေးများ — " + items.join(" | ");
     }
   } catch (e) {
     console.error("Sheet Ticker Error:", e);
@@ -177,7 +194,10 @@ function installPWA() {
 function initServiceWorker() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('Service Worker Registered Successfully:', reg.scope))
+      .then(reg => {
+        console.log('Service Worker Registered Successfully:', reg.scope);
+        reg.update(); // Forced Update to clear cache version 2
+      })
       .catch(err => console.error('Service Worker Registration Failed:', err));
   }
 }
